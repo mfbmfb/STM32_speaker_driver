@@ -24,7 +24,8 @@
 #define BUZZER_TIM &htim1
 #define BUZZER_CHANNEL TIM_CHANNEL_1
 
-// Notaların Frekansları (Hz)
+// Notalarin Frekanslari (Hz)
+#define NOTE_B3  247  // Si (kalin, Do'nun altindaki Si)
 #define NOTE_C4  262  // Do
 #define NOTE_D4  294  // Re
 #define NOTE_E4  330  // Mi
@@ -32,112 +33,127 @@
 #define NOTE_G4  392  // Sol
 #define NOTE_A4  440  // La
 #define NOTE_B4  494  // Si
-#define NOTE_C5  523  // Do (İnce)
+#define NOTE_C5  523  // Do (ince)
+#define NOTE_D5  587  // Re (ince)
+#define NOTE_E5  659  // Mi (ince)
 #define REST     0    // Sessizlik
+ 
+// Notalar arasi kisa sessizlik (staccato). Bu sure nota suresinin ICINDEN
+// dusulur, boylece tempo bozulmaz. Tum sureler bu degerden buyuk olmali.
+#define NOTE_GAP_MS  40
+ 
+// ---------------------------------------------------------------------------
+// Yasasin Okulumuz (Daha dun annemizin) - Sure birimleri
+// Tempoyu degistirmek icin sadece OKUL_Q degerini degistirmen yeterli.
+// ---------------------------------------------------------------------------
+#define OKUL_Q  500            // Dortluk nota (120 BPM)
+#define OKUL_H  (OKUL_Q * 2)   // Ikilik nota
+ 
+// ---------------------------------------------------------------------------
+// Ari Viz Viz Viz - Sure birimleri
+// Tempoyu degistirmek icin sadece ARI_E degerini degistirmen yeterli.
+// ---------------------------------------------------------------------------
+#define ARI_E  250             // Sekizlik nota
+#define ARI_Q  (ARI_E * 2)     // Dortluk nota
+#define ARI_H  (ARI_E * 4)     // Ikilik nota
 
-#define NOTE_D5  587  // İnce Re
-#define NOTE_E5  659  // İnce Mi
-
+// ===========================================================================
+// YASASIN OKULUMUZ - Notalar
+// (Fransiz melodisi "Ah! vous dirai-je, Maman" ile ayni; 8 dizelik tek kita)
+// ===========================================================================
 const uint16_t long_melody[] = {
-  // --- 1. KITAK (Giriş & Çiçekler) ---
-  // Daha dün annemizin kollarında yaşarken
+  // Daha dun annemizin
   NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
+  // kollarinda yasarken
   NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4,
-  // Çiçekli bahçemizin yollarında koşarken
-  NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
-  NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
-  // Şimdi okullu olduk sınıfları doldurduk
+  // Cicekli bahcemizin
   NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
+  // yollarinda kosarken
   NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4,
-
-  REST, // Bölüm arası kısa es
-
-  // --- 2. KITA (Okul Sevgisi & Tekrar) ---
-  // Sevinçliyiz hepimiz yaşasın okulumuz
+  // Simdi okullu olduk
   NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
+  // Siniflari doldurduk
   NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
-  // Okul bizim yuvamız, insanlık kapımız
+  // Sevincliyiz hepimiz
   NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
-  NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4,
-
-  REST, // Final öncesi es
-
-  // --- NAKARAT / FİNAL ÇIKIŞI ---
-  NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
-  NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
+  // Yasasin okulumuz
   NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4
 };
-
-const uint16_t ari_viz_melody[] = {
-	// --- 1. BÖLÜM: Yaz geldi çiçekler açtı ---
-	NOTE_C4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_F4,
-	REST,
-
-	// --- 2. BÖLÜM: Arı vız vız vız, arı vız vız vız ---
-	NOTE_B4, NOTE_D5, NOTE_D5, NOTE_D5, NOTE_C5, NOTE_D5, NOTE_E5,
-	REST,
-
-	// --- 3. BÖLÜM: Arı vız vız vız diye dolaşır ---
-	NOTE_C4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_F4,
-	REST,
-
-	// --- 4. BÖLÜM: Önce menekşeyi koklar, sonra gülü emeriz ---
-	NOTE_B4, NOTE_D5, NOTE_D5, NOTE_D5, NOTE_C5, NOTE_B4, NOTE_C5,
-	REST,
-
-	// --- 5. BÖLÜM (YENİ): Çiçek balını, çiçek balını, biz çok severiz ---
-	NOTE_C4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_F4,
-	NOTE_B4, NOTE_D5, NOTE_D5, NOTE_D5, NOTE_C5, NOTE_B4, NOTE_C5
-};
-
-// Nota Süreleri (ms)
-const uint16_t ari_viz_durations[] = {
-	// 1. Bölüm
-	300, 300, 300, 300, 300, 300, 400, 600,
-	200,
-
-	// 2. Bölüm
-	300, 300, 300, 300, 300, 300, 800,
-	200,
-
-	// 3. Bölüm
-	300, 300, 300, 300, 300, 300, 400, 600,
-	200,
-
-	// 4. Bölüm
-	300, 300, 300, 300, 300, 300, 800,
-	300,
-
-	// 5. Bölüm (Çiçek Balı)
-	300, 300, 300, 300, 300, 300, 400, 600,
-	300, 300, 300, 300, 300, 300, 900
-};
-
-// Nota Süreleri (ms)
+ 
+// Her dize: 6 adet dortluk + son notada ikilik
+#define OKUL_PHRASE  OKUL_Q, OKUL_Q, OKUL_Q, OKUL_Q, OKUL_Q, OKUL_Q, OKUL_H
+ 
+// Nota Sureleri (ms)
 const uint16_t long_durations[] = {
-  // 1. KITA
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-
-  500, // Ara es süresi
-
-  // 2. KITA
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-
-  500, // Ara es süresi
-
-  // NAKARAT / FİNAL
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 700,
-  350, 350, 350, 350, 350, 350, 1000
+  OKUL_PHRASE,  // Daha dun annemizin
+  OKUL_PHRASE,  // kollarinda yasarken
+  OKUL_PHRASE,  // Cicekli bahcemizin
+  OKUL_PHRASE,  // yollarinda kosarken
+  OKUL_PHRASE,  // Simdi okullu olduk
+  OKUL_PHRASE,  // Siniflari doldurduk
+  OKUL_PHRASE,  // Sevincliyiz hepimiz
+  OKUL_PHRASE   // Yasasin okulumuz
 };
+ 
+// ===========================================================================
+// ARI VIZ VIZ VIZ - Notalar
+// Not: Si (NOTE_B3) Do'nun ALTINDAKI Si'dir. Onceki kodda bir oktav yukaridaki
+// Si/Re/Do/Mi (B4, D5, C5, E5) kullanilmisti, bu yuzden melodi bozuk duyuluyordu.
+// ===========================================================================
+const uint16_t ari_viz_melody[] = {
+  // Yaz geldi cicekler acti
+  NOTE_C4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_F4,
+  // arilar hep dolasti
+  NOTE_B3, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_C4, NOTE_D4, NOTE_E4,
+  // Yaz geldi cicekler acti
+  NOTE_C4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_F4,
+  // arilar hep dolasti (bitis, Do'ya cozulur)
+  NOTE_B3, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_C4, NOTE_B3, NOTE_C4,
+ 
+  // Ari viz viz viz,
+  NOTE_E4, NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4,
+  // ari viz viz viz
+  NOTE_D4, NOTE_B3, NOTE_C4, NOTE_D4, NOTE_E4,
+  // Ari viz viz viz
+  NOTE_E4, NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4,
+  // diye dolasir
+  NOTE_D4, NOTE_D4, NOTE_C4, NOTE_B3, NOTE_C4,
+ 
+  // Ari viz viz viz,
+  NOTE_E4, NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4,
+  // ari viz viz viz
+  NOTE_D4, NOTE_B3, NOTE_C4, NOTE_D4, NOTE_E4,
+  // Ari viz viz viz
+  NOTE_E4, NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4,
+  // diye dolasir
+  NOTE_D4, NOTE_D4, NOTE_C4, NOTE_B3, NOTE_C4
+};
+ 
+// Kalip 1: "Yaz geldi cicekler acti" -> 7 sekizlik + son notada dortluk (8 nota)
+#define ARI_A_DUR  ARI_E, ARI_E, ARI_E, ARI_E, ARI_E, ARI_E, ARI_E, ARI_Q
+// Kalip 2: "arilar hep dolasti" -> 6 sekizlik + son notada ikilik (7 nota)
+#define ARI_B_DUR  ARI_E, ARI_E, ARI_E, ARI_E, ARI_E, ARI_E, ARI_H
+// Kalip 3: "Ari viz viz viz" -> 4 sekizlik + son notada dortluk (5 nota)
+#define ARI_C_DUR  ARI_E, ARI_E, ARI_E, ARI_E, ARI_Q
+// Kalip 4: "diye dolasir" -> 4 sekizlik + son notada ikilik (5 nota)
+#define ARI_D_DUR  ARI_E, ARI_E, ARI_E, ARI_E, ARI_H
+ 
+// Nota Sureleri (ms)
+const uint16_t ari_viz_durations[] = {
+  ARI_A_DUR,                                    // Yaz geldi cicekler acti
+  ARI_B_DUR,                                    // arilar hep dolasti
+  ARI_A_DUR,                                    // Yaz geldi cicekler acti
+  ARI_B_DUR,                                    // arilar hep dolasti (bitis)
+ 
+  ARI_C_DUR, ARI_C_DUR, ARI_C_DUR, ARI_D_DUR,   // Ari viz viz viz ... diye dolasir
+  ARI_C_DUR, ARI_C_DUR, ARI_C_DUR, ARI_D_DUR    // (tekrar)
+};
+ 
+// Nota dizisi ile sure dizisinin boyutu esit olmazsa derleme hatasi verir
+_Static_assert(sizeof(long_melody) == sizeof(long_durations),
+               "long_melody ve long_durations eleman sayisi esit olmali");
+_Static_assert(sizeof(ari_viz_melody) == sizeof(ari_viz_durations),
+               "ari_viz_melody ve ari_viz_durations eleman sayisi esit olmali");
 
 /* USER CODE END Includes */
 
@@ -167,52 +183,45 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
+// ===========================================================================
+// Calma fonksiyonlari
+// ===========================================================================
 void Play_Tone(uint16_t frequency) {
   if (frequency == 0) {
     __HAL_TIM_SET_COMPARE(BUZZER_TIM, BUZZER_CHANNEL, 0); // Sessizlik
     return;
   }
-
-  // Timer giriş saatimiz 1 MHz olduğu için Period = (1.000.000 / Frekans) - 1
+ 
+  // Timer giris saatimiz 1 MHz oldugu icin Period = (1.000.000 / Frekans) - 1
   uint32_t period = (1000000 / frequency) - 1;
-
+ 
   __HAL_TIM_SET_AUTORELOAD(BUZZER_TIM, period);
   __HAL_TIM_SET_COMPARE(BUZZER_TIM, BUZZER_CHANNEL, (period + 1) / 2); // %50 Duty Cycle
 }
-
-
-void Play_LongMelody(void) {
+ 
+static void Play_Melody(const uint16_t *notes, const uint16_t *durations, uint16_t total_notes) {
   HAL_TIM_PWM_Start(BUZZER_TIM, BUZZER_CHANNEL);
-
-  uint16_t total_notes = sizeof(long_melody) / sizeof(long_melody[0]);
-
-  for (int i = 0; i < total_notes; i++) {
-    Play_Tone(long_melody[i]);
-    HAL_Delay(long_durations[i]);
-
-    // Notaların birbirine yapışmaması ve belirginleşmesi için staccato es
+ 
+  for (uint16_t i = 0; i < total_notes; i++) {
+    Play_Tone(notes[i]);
+    HAL_Delay(durations[i] - NOTE_GAP_MS);
+ 
+    // Notalarin birbirine yapismamasi icin kisa es (sure icinden dusuldu)
     Play_Tone(REST);
-    HAL_Delay(40);
+    HAL_Delay(NOTE_GAP_MS);
   }
-
+ 
   HAL_TIM_PWM_Stop(BUZZER_TIM, BUZZER_CHANNEL);
 }
-
+ 
+void Play_LongMelody(void) {
+  Play_Melody(long_melody, long_durations,
+              sizeof(long_melody) / sizeof(long_melody[0]));
+}
+ 
 void Play_AriVizVizVizMelody(void) {
-  HAL_TIM_PWM_Start(BUZZER_TIM, BUZZER_CHANNEL);
-
-  uint16_t total_notes = sizeof(ari_viz_melody) / sizeof(ari_viz_melody[0]);
-
-  for (int i = 0; i < total_notes; i++) {
-    Play_Tone(ari_viz_melody[i]);
-    HAL_Delay(ari_viz_durations[i]);
-
-    // Notaların birbirine yapışmaması ve belirginleşmesi için staccato es
-    Play_Tone(REST);
-    HAL_Delay(40);
-  }
-
-  HAL_TIM_PWM_Stop(BUZZER_TIM, BUZZER_CHANNEL);
+  Play_Melody(ari_viz_melody, ari_viz_durations,
+              sizeof(ari_viz_melody) / sizeof(ari_viz_melody[0]));
 }
 /* USER CODE END PFP */
 
